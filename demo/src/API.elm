@@ -1,4 +1,4 @@
-module API exposing (..)
+port module API exposing (..)
 
 import Pipelines.Quote as Quote
 import Route exposing (..)
@@ -71,6 +71,9 @@ router conn =
             internalError (TextBody "bugs, bugs, bugs")
                 |> toResponder responsePort
 
+        ( GET, Number ) ->
+            Conn.pipeline |> loop number
+
         _ ->
             -- use this form of toResponder when you need to access the conn
             toResponder responsePort <|
@@ -80,10 +83,34 @@ router conn =
                         |> textBody ("Nothing at: " ++ conn.req.path)
 
 
+number : Msg -> Conn -> ( Conn, Cmd Msg )
+number msg conn =
+    case msg of
+        Endpoint ->
+            ( conn, getRandom () )
+
+        RandomNumber val ->
+            conn
+                |> textBody (toString val)
+                |> statusCode 200
+                |> send responsePort
+
+        _ ->
+            conn
+                |> unexpectedMsg msg
+                |> send responsePort
+
+
 
 -- SUBSCRIPTIONS
 
 
+port getRandom : () -> Cmd msg
+
+
+port random : (Float -> msg) -> Sub msg
+
+
 subscriptions : Conn -> Sub Msg
 subscriptions _ =
-    Sub.none
+    random RandomNumber

@@ -29,6 +29,14 @@ module.exports.handler = elmServerless.httpApi({
   // Your elm app is the handler
   handler: elm.API,
 
+  bindPorts: (app) => {
+    app.ports.getRandom.subscribe(() => {
+      const val = Math.random();
+      console.log('val', val);
+      app.ports.random.send(val);
+    });
+  },
+
   // Config is a record type that you define.
   // You will also provide a JSON decoder for this.
   // It should be deployment data that is constant, perhaps loaded from

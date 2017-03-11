@@ -52,6 +52,7 @@ to the program as `endpoint` (see above).
 type Msg
     = Endpoint
     | QuoteResult (Result Http.Error Quote)
+    | RandomNumber Float
 
 
 
