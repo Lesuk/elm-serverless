@@ -7,6 +7,7 @@ type Route
     = Home
     | Quote Lang
     | Buggy
+    | Number
     | NotFound
 
 
@@ -21,6 +22,7 @@ route =
         [ map Home top
         , map Quote (s "quote" </> lang)
         , map Buggy (s "buggy")
+        , map Number (s "number")
         ]
 
 

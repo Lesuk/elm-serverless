@@ -123,6 +123,11 @@ loadQuotes lang msg conn =
                         |> internalError (err |> toString |> TextBody)
                         |> send responsePort
 
+        _ ->
+            conn
+                |> unexpectedMsg msg
+                |> send responsePort
+
 
 respondWithQuotes : Msg -> Conn -> ( Conn, Cmd Msg )
 respondWithQuotes msg conn =
